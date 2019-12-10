@@ -90,3 +90,4 @@ export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
