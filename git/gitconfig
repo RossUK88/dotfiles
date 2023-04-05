@@ -1,0 +1,10 @@
+[commit]
+    gpgsign = true
+[fetch]
+    prune = true
+[include]
+    path = ~/.gitconfig_local
+[push]
+    default = current
+[init]
+    defaultBranch = main

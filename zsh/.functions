@@ -1,0 +1,30 @@
+# All the dig info
+function digga() {
+	dig +nocmd "$1" any +multiline +noall +answer
+}
+
+#shortcut voor zhs quick-look command
+function ql() {
+   quick-look "$1"
+}
+
+archive () {
+   zip -r "$1".zip -i "$1" ;
+}
+
+function removehost() {
+   ssh-keygen -R "$1"
+}
+
+# Scrape a single webpage with all assets
+function scrapeUrl() {
+    wget --adjust-extension --convert-links --page-requisites --span-hosts --no-host-directories "$1"
+}
+
+function scheduler () {
+    while :; do
+        php artisan schedule:run
+	echo "Sleeping 60 seconds..."
+        sleep 60
+    done
+}
