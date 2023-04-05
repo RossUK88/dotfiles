@@ -45,20 +45,20 @@ bindkey -s "^[Oo" "/"
 
 # Load the shell dotfiles, and then some:
 # * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.dotfiles/shell/.{exports,aliases,functions}; do
+for file in ~/.dotfiles/zsh/.{exports,aliases,functions}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 
-for file in ~/.dotfiles-custom/shell/.{exports,aliases,functions,zshrc}; do
+for file in ~/.dotfiles-custom/zsh/.{exports,aliases,functions,zshrc}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 unset file
 
 # Load rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 
 export PATH="$PATH:$HOME/.rvm/bin"
-. $HOME/.dotfiles/shell/z.sh
+. $HOME/.dotfiles/zsh/z.sh
 
 # Alias hub to git
 eval "$(hub alias -s)"

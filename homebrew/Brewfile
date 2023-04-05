@@ -35,6 +35,7 @@ brew "wget"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "axllent/apps/mailpit"
+brew "yarn"
 
 # Casks
 cask "dbngin"
