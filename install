@@ -19,11 +19,7 @@ ln -sf $DOTFILES/git/.global-gitignore $HOME/.gitignore_global
 
 # Symlink zsh prefs
 rm $HOME/.zshrc
-ln -s $DOTFILES/shell/.zshrc $HOME/.zshrc
-
-# Symlink yarn prefs
-rm $HOME/.yarnrc
-ln -s $DOTFILES/shell/.yarnrc $HOME/.yarnrc
+ln -s $DOTFILES/zsh/.zshrc $HOME/.zshrc
 
 # Fix missing font characters (see https://github.com/robbyrussell/oh-my-zsh/issues/1906)
 cd ~/.oh-my-zsh/themes/
