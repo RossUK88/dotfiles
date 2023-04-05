@@ -1,25 +1,17 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
-
 ZSH_CUSTOM=$HOME/.dotfiles/misc/oh-my-zsh-custom
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 ZSH_THEME="agnoster"
-
-# Hide username in prompt
 DEFAULT_USER=`whoami`
+export UPDATE_ZSH_DAYS=6
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git laravel4 laravel5 composer osx vagrant)
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-export=Users/$DEFAULT_USER/.rvm/gems/ruby-2.1.2/bin:$PATH
 #set numeric keys
 # 0 . Enter
 bindkey -s "^[Op" "0"
@@ -49,30 +41,20 @@ for file in ~/.dotfiles/zsh/.{exports,aliases,functions}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 
-for file in ~/.dotfiles-custom/zsh/.{exports,aliases,functions,zshrc}; do
-	[ -r "$file" ] && [ -f "$file" ] && source "$file"
-done
 unset file
 
-# Load rvm
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+typeset -U path cdpath fpath
+path=(
+    $HOME/.local/bin
+    $HOME/.composer/vendor/bin
+    ./vendor/bin
+    ./node_modules/.bin
+    $path
+)
 
-export PATH="$PATH:$HOME/.rvm/bin"
-. $HOME/.dotfiles/zsh/z.sh
-
-# Alias hub to git
-eval "$(hub alias -s)"
-
-# Sudoless npm https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md
-NPM_PACKAGES="${HOME}/.npm-packages"
-PATH="$NPM_PACKAGES/bin:$PATH"
-# Unset manpath so we can inherit from /etc/manpath via the `manpath`
-# command
-unset MANPATH # delete if you already modified MANPATH elsewhere in your config
-MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
-
-export PATH=$HOME/.dotfiles/bin:$PATH
-[[ -e ~/.phpbrew/bashrc ]] && source ~/.phpbrew/bashrc
+export NVM_DIR="$HOME/.nvm"
+  [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
+  [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 
 # Import ssh keys in keychain
 ssh-add -A 2>/dev/null;
@@ -80,14 +62,4 @@ ssh-add -A 2>/dev/null;
 # Setup xdebug
 export XDEBUG_CONFIG="idekey=VSCODE"
 
-# Enable autosuggestions
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# Extra paths
-export PATH="$HOME/.composer/vendor/bin:$PATH"
-export PATH=/usr/local/bin:$PATH
-export PATH="$HOME/.yarn/bin:$PATH"
-export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
-export PATH="/usr/local/opt/node@8/bin:$PATH"
-
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
