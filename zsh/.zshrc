@@ -12,6 +12,10 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 #set numeric keys
 # 0 . Enter
 bindkey -s "^[Op" "0"
@@ -52,10 +56,6 @@ path=(
     $path
 )
 
-export NVM_DIR="$HOME/.nvm"
-  [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
-  [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
-
 # Import ssh keys in keychain
 ssh-add -A 2>/dev/null;
 
@@ -63,3 +63,7 @@ ssh-add -A 2>/dev/null;
 export XDEBUG_CONFIG="idekey=VSCODE"
 
 
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
+export PATH="/opt/homebrew/opt/icu4c@74/bin:$PATH"
+export PATH="/opt/homebrew/opt/icu4c@74/sbin:$PATH"

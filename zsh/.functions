@@ -28,3 +28,7 @@ function scheduler () {
         sleep 60
     done
 }
+
+function streetconnect() {
+  aws ecs execute-command --interactive --command bash --cluster street-$1-ecs --container php-fpm --task $(aws ecs list-tasks --cluster street-$1-ecs --service-name street-$1-app-service | jq '.taskArns[0]' | xargs basename)
+}

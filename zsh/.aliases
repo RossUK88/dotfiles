@@ -56,3 +56,5 @@ alias sudo='sudo '
 
 # Scape webpage
 alias scrape="scrapeUrl"
+
+alias streettunnel="ssh -i ~/.ssh/RossSteele -N -L 13306:replica.db.street.co.uk:3306 ec2-user@bastion.live.internal.street.engineering"
