@@ -1,0 +1,66 @@
+{
+  "Profiles": [
+    {
+      "Name": "Street LIVE",
+      "Guid": "A80E77F0-1D67-469F-B898-00C154D4CDE9",
+      "Dynamic Profile Parent Name": "Ross Dev",
+      "Background Color": {
+        "Red Component": 0.36,
+        "Green Component": 0.1,
+        "Blue Component": 0.1,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Foreground Color": {
+        "Red Component": 0.96,
+        "Green Component": 0.96,
+        "Blue Component": 0.96,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Bold Color": {
+        "Red Component": 1.0,
+        "Green Component": 1.0,
+        "Blue Component": 1.0,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Cursor Color": {
+        "Red Component": 1.0,
+        "Green Component": 0.85,
+        "Blue Component": 0.85,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Cursor Text Color": {
+        "Red Component": 0.36,
+        "Green Component": 0.1,
+        "Blue Component": 0.1,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Selection Color": {
+        "Red Component": 0.55,
+        "Green Component": 0.15,
+        "Blue Component": 0.15,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Selected Text Color": {
+        "Red Component": 1.0,
+        "Green Component": 1.0,
+        "Blue Component": 1.0,
+        "Alpha Component": 1.0,
+        "Color Space": "sRGB"
+      },
+      "Badge Text": "\u26a0\ufe0f LIVE \u2014 PRODUCTION",
+      "Badge Color": {
+        "Red Component": 1.0,
+        "Green Component": 0.85,
+        "Blue Component": 0.85,
+        "Alpha Component": 0.5,
+        "Color Space": "sRGB"
+      }
+    }
+  ]
+}

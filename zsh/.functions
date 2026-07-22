@@ -32,3 +32,78 @@ function scheduler () {
 function streetconnect() {
   aws ecs execute-command --interactive --command bash --cluster street-$1-ecs --container php-fpm --task $(aws ecs list-tasks --cluster street-$1-ecs --service-name street-$1-app-service | jq '.taskArns[0]' | xargs basename)
 }
+
+  audit-log() {
+    local model_name="$1"
+    local id="$2"
+    local start_date="$3"
+    local end_date="$4"
+
+    if [[ -z "$model_name" || -z "$id" || -z "$start_date" || -z "$end_date" ]]; then
+      echo "Usage: audit-log <model_name> <model_id> <start_date> <end_date>"
+      echo "Example: audit-log 'App\\Models\\User' 123 '2024-01-01-00' '2024-01-31-23'"
+      return 1
+    fi
+
+    local query="
+      SELECT
+        json_extract(log, '\$.context.subject_type') AS subject_type,
+        json_extract(log, '\$.context.subject_id') AS subject_id,
+        json_extract(log, '\$.message') AS message,
+        json_extract(log, '\$.context') AS context,
+        json_extract(log, '\$.context.causer_type') AS causer_type,
+        json_extract(log, '\$.context.causer_id') AS causer_id,
+        json_extract(log, '\$.datetime') AS datetime,
+        log
+      FROM audit_log_live.audit_log_live_s3
+      WHERE json_extract_scalar(log, '\$.context.subject_type') = '$model_name'
+      AND CAST(json_extract_scalar(log, '\$.context.subject_id') AS VARCHAR) = '$id'
+      AND datehour BETWEEN '$start_date' AND '$end_date'
+      ORDER BY json_extract_scalar(log, '\$.datetime') DESC
+      LIMIT 100
+    "
+
+    # Start query
+    local execution_id=$(aws athena start-query-execution \
+      --query-string "$query" \
+      --work-group "audit-log-live" \
+      --query-execution-context "Database=audit_log_live,Catalog=AwsDataCatalog" \
+      --result-configuration "OutputLocation=s3://aws-athena-query-results-eu-west-1-339712815005/" \
+      --region "eu-west-1" \
+      --output json | jq -r '.QueryExecutionId')
+
+    if [[ -z "$execution_id" ]]; then
+      echo "Failed to start query"
+      return 1
+    fi
+
+    echo "Query started: $execution_id"
+
+    # Poll for completion
+    local query_state="RUNNING"
+    while [[ "$query_state" == "RUNNING" || "$query_state" == "QUEUED" ]]; do
+      sleep 2
+      query_state=$(aws athena get-query-execution \
+        --query-execution-id "$execution_id" \
+        --region "eu-west-1" \
+        --output json | jq -r '.QueryExecution.Status.State')
+      echo "Status: $query_state"
+    done
+
+    if [[ "$query_state" != "SUCCEEDED" ]]; then
+      echo "Query failed with status: $query_state"
+      aws athena get-query-execution \
+        --query-execution-id "$execution_id" \
+        --region "eu-west-1" \
+        --output json | jq '.QueryExecution.Status'
+      return 1
+    fi
+
+    # Get results
+    aws athena get-query-results \
+      --query-execution-id "$execution_id" \
+      --region "eu-west-1" \
+      --output json | jq '.ResultSet.Rows'
+  }
+
+
