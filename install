@@ -15,6 +15,29 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
 ln -sf $DOTFILES/git/.global-gitignore $HOME/.gitignore_global
 
+# Machine-local git identity (kept out of the committed config so this repo
+# isn't tied to a work email). Prompts once; skips if already set.
+GITCONFIG_LOCAL="$HOME/.gitconfig_local"
+if [ -f "$GITCONFIG_LOCAL" ]; then
+  echo "Git identity already set in $GITCONFIG_LOCAL — skipping."
+elif [ -t 0 ]; then
+  echo 'Git identity for this machine'
+  echo '-----------------------------'
+  read -r -p 'Git name:  ' git_name
+  read -r -p 'Git email: ' git_email
+  if [ -n "$git_name" ] && [ -n "$git_email" ]; then
+    printf '[user]\n\tname = %s\n\temail = %s\n' "$git_name" "$git_email" > "$GITCONFIG_LOCAL"
+    echo "Wrote $GITCONFIG_LOCAL"
+  else
+    echo "Skipped — name/email blank. Set later in $GITCONFIG_LOCAL."
+  fi
+else
+  echo "Non-interactive shell — set your git identity in $GITCONFIG_LOCAL:"
+  echo '  [user]'
+  echo '      name = Your Name'
+  echo '      email = you@example.com'
+fi
+
 # Symlink zsh prefs
 ln -sf $DOTFILES/zsh/.zshrc $HOME/.zshrc
 
