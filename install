@@ -3,52 +3,60 @@
 # Hide "last login" line when starting a new terminal session
 touch $HOME/.hushlogin
 
-# Install zsh
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Install oh-my-zsh
 echo 'Install oh-my-zsh'
 echo '-----------------'
 rm -rf $HOME/.oh-my-zsh
-curl -L https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-
-DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Add global gitignore
+# Symlink git config + global gitignore
 ln -sf $DOTFILES/git/gitconfig $HOME/.gitconfig
 ln -sf $DOTFILES/git/.global-gitignore $HOME/.gitignore_global
 
+# Machine-local git identity (kept out of the committed config so this repo
+# isn't tied to a work email). Prompts once; skips if already set.
+GITCONFIG_LOCAL="$HOME/.gitconfig_local"
+if [ -f "$GITCONFIG_LOCAL" ]; then
+  echo "Git identity already set in $GITCONFIG_LOCAL — skipping."
+elif [ -t 0 ]; then
+  echo 'Git identity for this machine'
+  echo '-----------------------------'
+  read -r -p 'Git name:  ' git_name
+  read -r -p 'Git email: ' git_email
+  if [ -n "$git_name" ] && [ -n "$git_email" ]; then
+    printf '[user]\n\tname = %s\n\temail = %s\n' "$git_name" "$git_email" > "$GITCONFIG_LOCAL"
+    echo "Wrote $GITCONFIG_LOCAL"
+  else
+    echo "Skipped — name/email blank. Set later in $GITCONFIG_LOCAL."
+  fi
+else
+  echo "Non-interactive shell — set your git identity in $GITCONFIG_LOCAL:"
+  echo '  [user]'
+  echo '      name = Your Name'
+  echo '      email = you@example.com'
+fi
 
 # Symlink zsh prefs
-rm $HOME/.zshrc
-ln -s $DOTFILES/zsh/.zshrc $HOME/.zshrc
+ln -sf $DOTFILES/zsh/.zshrc $HOME/.zshrc
 
-# Fix missing font characters (see https://github.com/robbyrussell/oh-my-zsh/issues/1906)
-cd ~/.oh-my-zsh/themes/
-git checkout d6a36b1 agnoster.zsh-theme
+# Symlink iTerm2 dynamic profiles (Catppuccin Latte + Street LIVE warning)
+DP="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+mkdir -p "$DP"
+for profile in "$DOTFILES"/misc/iterm/*.json; do
+  ln -sf "$profile" "$DP/$(basename "$profile")"
+done
 
-# Activate z
-cd ~/.dotfiles/zsh
-chmod +x z.sh
-
+# Install Homebrew
 echo 'Install homebrew'
 echo '----------------'
-echo install homebrew
-sudo rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 echo '++++++++++++++++++++++++++++++'
-echo '++++++++++++++++++++++++++++++'
-echo 'Run the brew file!'
-echo 'composer global require laravel/valet'
-
-echo '++++++++++++++++++++++++++++++'
-echo 'Things to do to make the agnoster terminal theme work:'
-echo '1. Install menlo patched font included in ~/.dotfiles/misc https://gist.github.com/qrush/1595572/raw/Menlo-Powerline.otf'
-echo '2. Install patched solarized theme included in ~/.dotfiles/misc'
-
-echo '++++++++++++++++++++++++++++++'
-echo 'Some optional tidbits'
-
-echo '1. Set some sensible os x defaults by running: $DOTFILES/macos/set-defaults.sh'
-
-echo '++++++++++++++++++++++++++++++'
+echo 'Next steps:'
+echo "1. Install everything: brew bundle --file=$DOTFILES/homebrew/Brewfile"
+echo '2. Catppuccin zsh theme: git clone https://github.com/JannoTjarks/catppuccin-zsh.git ~/.local/share/catppuccin-zsh'
+echo '   then: ln -sf ~/.local/share/catppuccin-zsh/catppuccin.zsh-theme ~/.dotfiles/misc/oh-my-zsh-custom/themes/catppuccin.zsh-theme'
+echo '3. In iTerm2, set the "Ross Dev — Catppuccin Latte" profile as default (already scripted via defaults if prefs carried over).'
 echo '++++++++++++++++++++++++++++++'

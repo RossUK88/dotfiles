@@ -1,59 +1,96 @@
-# Taps
-tap "axllent/apps"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-fonts"
-tap "homebrew/cask-versions"
-tap "homebrew/core"
-tap "homebrew/services"
-tap "minio/stable"
-tap "nicoverbruggen/cask"
-tap "shivammathur/extensions"
-tap "shivammathur/php"
+# Regenerated from actual machine state (brew bundle dump), then curated.
+# Deprecated taps (homebrew/core, homebrew/cask, cask-fonts, cask-versions)
+# removed — modern Homebrew no longer needs them tapped.
 
-# Packages
+# Taps
+tap "shivammathur/php"        # versioned/older PHP if ever needed
+tap "shivammathur/extensions" # PHP extensions (xdebug, redis, etc.)
+
+# CLI tools
 brew "bash"
 brew "bat"
-brew "php"
-brew "composer"
 brew "coreutils"
-brew "dnsmasq"
+brew "eza"
+brew "ffmpeg"
 brew "gh"
 brew "git"
 brew "go"
 brew "grep"
 brew "htop"
+brew "jq"
 brew "mas"
-brew "meilisearch", restart_service: true
-brew "minio", restart_service: true
-brew "nginx"
-brew "node"
+brew "pinentry-mac"
+brew "poppler"
 brew "pv"
-brew "python"
-brew "redis", restart_service: true
+brew "sops"
 brew "wget"
+brew "yt-dlp"
+
+# Shell / prompt
+brew "powerlevel10k"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
-brew "axllent/apps/mailpit"
+
+# PHP (8.5 only — older versions dropped)
+brew "php"
+brew "composer"
+
+# Web / services
+brew "dnsmasq", restart_service: :changed
+brew "nginx", restart_service: :changed
+brew "redis", restart_service: :changed
+
+# Databases
+brew "mysql"
+brew "mysql-client"
+brew "mysql@8.0"
+
+# JS / Node
+brew "node"
 brew "yarn"
 
+# Python (pyenv-managed + brew fallbacks)
+brew "pyenv"
+brew "python@3.12"
+brew "python@3.10"
+
+# Infra / tooling
+brew "tfenv"
+brew "watchman"   # pulls folly/fizz/wangle/fbthrift/fb303/edencommon/mvfst as deps
+
+# ICU (kept for linked PHP; review if PHP deps change)
+brew "icu4c@74"
+brew "icu4c@76"
+
 # Casks
+cask "orbstack"          # replaces Docker Desktop
 cask "dbngin"
 cask "discord"
-cask "docker"
-cask "firefox-developer-edition"
 cask "github"
 cask "gpg-suite"
 cask "imageoptim"
 cask "iterm2"
 cask "jetbrains-toolbox"
 cask "krisp"
+cask "mark-text"
 cask "ngrok"
-cask "phpmon"
 cask "postman"
-cask "raycast"
 cask "spotify"
 cask "tableplus"
+
+# Fonts
 cask "font-jetbrains-mono"
-cask "font-jetbrainsmono-nerd-font"
-cask "font-jetbrainsmono-nerd-font-mono"
+cask "font-jetbrains-mono-nerd-font"
+
+# Mac App Store
+mas "1Password for Safari", id: 1569813296
+mas "Keynote", id: 409183694
+mas "Klack", id: 6446206067
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Todoist", id: 585829637
+mas "WhatsApp", id: 310633997
+mas "Xcode", id: 497799835
+
+# npm globals
+npm "eas-cli"

@@ -58,3 +58,4 @@ alias sudo='sudo '
 alias scrape="scrapeUrl"
 
 alias streettunnel="ssh -i ~/.ssh/RossSteele -N -L 13306:replica.db.street.co.uk:3306 ec2-user@bastion.live.internal.street.engineering"
+alias streetqueue="php artisan queue:listen --queue=default,priority,notification,long,scout,matching,cas --timeout=999999 -vvv"

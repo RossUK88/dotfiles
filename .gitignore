@@ -1,0 +1,5 @@
+.DS_Store
+
+# Machine-specific symlink into a third-party clone (recreated by ./install).
+# The catppuccin-zsh theme lives at ~/.local/share/catppuccin-zsh
+misc/oh-my-zsh-custom/themes/catppuccin.zsh-theme
